@@ -56,9 +56,10 @@ Sections: preloader → floating pill nav + spy → full-screen menu → hero (m
 - Upwork: https://www.upwork.com/freelancers/~0140fb2d4324cae6a4
 
 ## Deploy
-- Repo: taimoor148 / trimax7-portfolio
-- Vercel production: (add URL after deploy)
-- Repo set to **private** after deploy.
+- Repo: taimoor148/trimax7-portfolio — **PRIVATE** (https://github.com/taimoor148/trimax7-portfolio)
+- Vercel production: **https://trimax7-portfolio.vercel.app**
+- Vercel inspect: https://vercel.com/taimoormateen80-gmailcoms-projects/trimax7-portfolio
+- Commit: `ef2a747` — "feat: trimax7 portfolio — single-file premium portfolio with 5 live demos, GSAP/Lenis/Three.js, full responsive + a11y"
 
 ## Files Touched
 - `index.html` — entire portfolio (single file).
