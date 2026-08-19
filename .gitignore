@@ -1,0 +1,7 @@
+node_modules/
+.obsidian/
+.vercel/
+.DS_Store
+Thumbs.db
+package.json
+package-lock.json
