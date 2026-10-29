@@ -615,6 +615,88 @@
     .cta-mail { position: relative; display: inline-flex; align-items: center; gap: 10px; margin-top: var(--space-6); font-family: var(--font-mono); font-size: 0.9rem; color: var(--text-2); letter-spacing: 0.04em; }
     .cta-mail:hover { color: var(--lime); }
 
+    /* ---------- contact form ---------- */
+    .cta-grid { display: grid; gap: var(--space-8); align-items: start; }
+    .cta-copy { min-width: 0; }
+
+    .cta-form {
+      position: relative; margin-top: var(--space-8);
+      padding: clamp(20px, 3vw, 34px);
+      border: 1px solid var(--line); border-radius: var(--r-lg);
+      background: linear-gradient(180deg, rgba(22, 26, 21, 0.94), rgba(10, 11, 9, 0.94));
+      box-shadow: 0 24px 80px rgba(0, 0, 0, 0.35);
+      overflow: hidden;
+    }
+    .cta-form::before {
+      content: ""; position: absolute; inset: 0; pointer-events: none; border-radius: inherit;
+      background: radial-gradient(620px circle at 100% 0%, rgba(198, 242, 75, 0.09), transparent 62%);
+    }
+    .cta-form form { position: relative; z-index: 1; }
+
+    .form-head { display: flex; align-items: baseline; justify-content: space-between; gap: var(--space-4); margin-bottom: var(--space-5); }
+    .form-kicker { font-family: var(--font-mono); font-size: 0.7rem; letter-spacing: 0.16em; text-transform: uppercase; color: var(--lime); }
+    .form-hint { font-family: var(--font-mono); font-size: 0.64rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--text-3); }
+
+    .form-row { display: grid; gap: var(--space-4); }
+    .field { display: grid; gap: 8px; margin-bottom: var(--space-4); }
+    .field > span { font-family: var(--font-mono); font-size: 0.66rem; letter-spacing: 0.14em; text-transform: uppercase; color: var(--text-3); }
+    .field > span b { color: var(--lime); font-weight: 400; }
+    .field input, .field textarea {
+      width: 100%; min-height: 46px; padding: 12px 14px;
+      color: var(--text); background: rgba(6, 7, 6, 0.6);
+      border: 1px solid var(--line); border-radius: var(--r-md);
+      font-family: var(--font-sans); font-size: 0.95rem; line-height: 1.4;
+      transition: border-color var(--dur-fast), background-color var(--dur-fast), box-shadow var(--dur-fast);
+    }
+    .field textarea { min-height: 116px; resize: vertical; line-height: 1.55; }
+    .field input::placeholder, .field textarea::placeholder { color: #5C665E; }
+    .field input:hover, .field textarea:hover { border-color: var(--line-strong); }
+    .field input:focus, .field textarea:focus {
+      outline: none; border-color: rgba(198, 242, 75, 0.55);
+      background: rgba(6, 7, 6, 0.88); box-shadow: 0 0 0 3px rgba(198, 242, 75, 0.1);
+    }
+    .field.is-invalid input, .field.is-invalid textarea { border-color: rgba(255, 138, 138, 0.65); }
+    .field-error { display: block; min-height: 0; font-family: var(--font-mono); font-size: 0.66rem; font-style: normal; letter-spacing: 0.03em; color: #FF8A8A; }
+    .field-error:empty { display: none; }
+
+    .consent { display: flex; align-items: flex-start; gap: 10px; padding: 4px 0; margin: var(--space-2) 0 var(--space-4); color: var(--text-3); font-size: 0.82rem; line-height: 1.5; cursor: pointer; }
+    .consent input {
+      appearance: none; -webkit-appearance: none; flex: 0 0 auto;
+      width: 18px; height: 18px; margin: 2px 0 0; cursor: pointer;
+      border: 1px solid var(--line-strong); border-radius: 3px; background: transparent;
+      transition: background-color var(--dur-fast), border-color var(--dur-fast);
+    }
+    .consent input:checked { background: var(--lime); border-color: var(--lime); }
+    .consent input:checked::after {
+      content: ""; display: block; width: 5px; height: 9px; margin: 2px 0 0 5px;
+      border: solid var(--bg-deep); border-width: 0 2px 2px 0; transform: rotate(45deg);
+    }
+    .consent a { color: var(--text-2); text-decoration: underline; text-underline-offset: 2px; }
+    .consent a:hover { color: var(--lime); }
+
+    .hp { position: absolute !important; left: -9999px !important; width: 1px; height: 1px; opacity: 0; pointer-events: none; }
+
+    .cta-form .btn { width: 100%; margin-top: var(--space-1); }
+    .cta-form .btn[disabled] { opacity: 0.72; cursor: progress; }
+    .btn .spinner { width: 14px; height: 14px; border-radius: 50%; border: 2px solid rgba(6, 7, 6, 0.3); border-top-color: var(--bg-deep); animation: formSpin 0.7s linear infinite; }
+    @keyframes formSpin { to { transform: rotate(360deg); } }
+
+    .form-status { margin-top: var(--space-4); font-family: var(--font-mono); font-size: 0.74rem; line-height: 1.6; letter-spacing: 0.02em; color: var(--text-2); }
+    .form-status:empty { display: none; }
+    .form-status[data-state="success"] { color: var(--lime); }
+    .form-status[data-state="error"] { color: #FF8A8A; }
+    .form-status[data-state="info"] { color: var(--cyan); }
+    .form-note { margin-top: 10px; font-family: var(--font-mono); font-size: 0.62rem; letter-spacing: 0.08em; text-transform: uppercase; color: var(--text-3); }
+
+    @media (min-width: 560px) {
+      .form-row { grid-template-columns: 1fr 1fr; }
+    }
+    @media (min-width: 1024px) {
+      .cta-grid { grid-template-columns: minmax(0, 1.02fr) minmax(0, 0.98fr); gap: var(--space-10); align-items: center; }
+      .cta-copy h2 { font-size: clamp(2.7rem, 6vw, 5.4rem); }
+      .cta-form { margin-top: 0; }
+    }
+
     /* ---------- footer ---------- */
     .footer { border-top: 1px solid var(--line); padding: var(--space-8) 0 var(--space-7); }
     .footer-grid { display: grid; grid-template-columns: 2fr 1fr 1fr 1fr; gap: var(--space-8); }
@@ -1410,17 +1492,76 @@
     <section class="cta" id="contact" aria-label="Contact">
       <div class="cta-field" id="ctaField" aria-hidden="true"></div>
       <div class="container cta-inner">
-        <span class="cta-label">Have a project in mind?</span>
-        <h2>
-          <span class="line"><span>LET'S BUILD</span></span>
-          <span class="line"><span>SOMETHING</span></span>
-          <span class="line"><span><em>MEMORABLE.</em></span></span>
-        </h2>
-        <div class="cta-row">
-          <a class="btn btn-primary" href="mailto:taimoormateen80@gmail.com?subject=Project%20inquiry%20—%20via%20trimax7.dev">Start a Project <svg class="arrow" width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden="true"><path d="M3 11L11 3M11 3H5M11 3v6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
-          <a class="btn btn-ghost" href="https://www.upwork.com/freelancers/~0140fb2d4324cae6a4" target="_blank" rel="noopener">Hire me on Upwork</a>
+        <div class="cta-grid">
+          <div class="cta-copy">
+            <span class="cta-label">Have a project in mind?</span>
+            <h2>
+              <span class="line"><span>LET'S BUILD</span></span>
+              <span class="line"><span>SOMETHING</span></span>
+              <span class="line"><span><em>MEMORABLE.</em></span></span>
+            </h2>
+            <div class="cta-row">
+              <a class="btn btn-primary" href="mailto:taimoormateen80@gmail.com?subject=Project%20inquiry%20—%20via%20trimax7.dev">Start a Project <svg class="arrow" width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden="true"><path d="M3 11L11 3M11 3H5M11 3v6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
+              <a class="btn btn-ghost" href="https://www.upwork.com/freelancers/~0140fb2d4324cae6a4" target="_blank" rel="noopener">Hire me on Upwork</a>
+            </div>
+            <a class="cta-mail" href="mailto:taimoormateen80@gmail.com">taimoormateen80@gmail.com <svg width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden="true"><path d="M3 11L11 3M11 3H5M11 3v6" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
+          </div>
+
+          <div class="cta-form">
+            <form id="contactForm" novalidate>
+              <div class="form-head">
+                <span class="form-kicker">Project inquiry</span>
+                <span class="form-hint">Straight to my CRM</span>
+              </div>
+
+              <div class="form-row">
+                <label class="field" data-field="name">
+                  <span>Name <b>*</b></span>
+                  <input id="cf-name" name="name" type="text" autocomplete="name" placeholder="Your name" maxlength="120" required />
+                  <em class="field-error" data-error-for="name"></em>
+                </label>
+                <label class="field" data-field="email">
+                  <span>Email <b>*</b></span>
+                  <input id="cf-email" name="email" type="email" autocomplete="email" inputmode="email" placeholder="you@company.com" maxlength="254" required />
+                  <em class="field-error" data-error-for="email"></em>
+                </label>
+              </div>
+
+              <div class="form-row">
+                <label class="field" data-field="phone">
+                  <span>Phone</span>
+                  <input id="cf-phone" name="phone" type="tel" autocomplete="tel" inputmode="tel" placeholder="+92 300 0000000" maxlength="40" />
+                  <em class="field-error" data-error-for="phone"></em>
+                </label>
+                <label class="field" data-field="company">
+                  <span>Company</span>
+                  <input id="cf-company" name="company" type="text" autocomplete="organization" placeholder="Company (optional)" maxlength="160" />
+                </label>
+              </div>
+
+              <label class="field" data-field="message">
+                <span>Project details <b>*</b></span>
+                <textarea id="cf-message" name="message" rows="4" placeholder="What are you building, and what do you need?" maxlength="5000" required></textarea>
+                <em class="field-error" data-error-for="message"></em>
+              </label>
+
+              <label class="consent">
+                <input type="checkbox" id="cf-consent" name="consent" required />
+                <span>I agree to be contacted about this inquiry. Details are handled per the <a href="https://leadpilot-astro.vercel.app/privacy" target="_blank" rel="noopener">privacy policy</a>.</span>
+              </label>
+
+              <input class="hp" type="text" name="website" id="cf-website" tabindex="-1" autocomplete="off" aria-hidden="true" />
+
+              <button class="btn btn-primary" type="submit" id="cf-submit">
+                <span class="btn-label">Send inquiry</span>
+                <svg class="arrow" width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden="true"><path d="M3 11L11 3M11 3H5M11 3v6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+              </button>
+
+              <p class="form-status" id="cf-status" role="status" aria-live="polite"></p>
+              <p class="form-note">No email app needed · Replies within 24h</p>
+            </form>
+          </div>
         </div>
-        <a class="cta-mail" href="mailto:taimoormateen80@gmail.com">taimoormateen80@gmail.com <svg width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden="true"><path d="M3 11L11 3M11 3H5M11 3v6" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
       </div>
     </section>
   </main>
@@ -2443,5 +2584,8 @@
     document.addEventListener("DOMContentLoaded", init);
   })();
   </script>
+
+  <!-- LeadPilot AI contact form (Stage 2) — public anon key only, RLS-protected -->
+  <script src="/contact-form.js" defer></script>
 </body>
 </html>
