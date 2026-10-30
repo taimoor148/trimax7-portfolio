@@ -1255,7 +1255,7 @@
       <li><a href="#about" data-scroll>About</a></li>
       <li><a href="#stack" data-scroll>Stack</a></li>
     </ul>
-    <a class="nav-cta" href="#contact" data-scroll>Hire Me <svg width="12" height="12" viewBox="0 0 12 12" fill="none" aria-hidden="true"><path d="M2 10L10 2M10 2H4M10 2v6" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
+    <a class="nav-cta" href="#contact" data-scroll data-track="nav-hire">Hire Me <svg width="12" height="12" viewBox="0 0 12 12" fill="none" aria-hidden="true"><path d="M2 10L10 2M10 2H4M10 2v6" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
     <button class="nav-toggle" id="menuOpen" aria-expanded="false" aria-controls="menu">Menu</button>
   </nav>
 
@@ -1293,7 +1293,7 @@
         <p class="hero-sub mask"><span>I design and build premium websites, AI-powered interfaces and the automation systems behind them — so your business looks exceptional and operates smarter.</span></p>
         <div class="hero-ctas">
           <a class="btn btn-primary" href="#work" data-scroll>View Work <svg class="arrow" width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden="true"><path d="M3 11L11 3M11 3H5M11 3v6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
-          <a class="btn btn-ghost" href="#contact" data-scroll>Work With Me</a>
+          <a class="btn btn-ghost" href="#contact" data-scroll data-track="hero-contact">Work With Me</a>
         </div>
         <div class="hero-meta">
           <span class="status"><span class="dot" aria-hidden="true"></span>Available for new projects</span>
@@ -1501,10 +1501,10 @@
               <span class="line"><span><em>MEMORABLE.</em></span></span>
             </h2>
             <div class="cta-row">
-              <a class="btn btn-primary" href="mailto:taimoormateen80@gmail.com?subject=Project%20inquiry%20—%20via%20trimax7.dev">Start a Project <svg class="arrow" width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden="true"><path d="M3 11L11 3M11 3H5M11 3v6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
-              <a class="btn btn-ghost" href="https://www.upwork.com/freelancers/~0140fb2d4324cae6a4" target="_blank" rel="noopener">Hire me on Upwork</a>
+              <a class="btn btn-primary" href="mailto:taimoormateen80@gmail.com?subject=Project%20inquiry%20—%20via%20trimax7.dev" data-track="cta-start-project">Start a Project <svg class="arrow" width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden="true"><path d="M3 11L11 3M11 3H5M11 3v6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
+              <a class="btn btn-ghost" href="https://www.upwork.com/freelancers/~0140fb2d4324cae6a4" target="_blank" rel="noopener" data-track="cta-upwork">Hire me on Upwork</a>
             </div>
-            <a class="cta-mail" href="mailto:taimoormateen80@gmail.com">taimoormateen80@gmail.com <svg width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden="true"><path d="M3 11L11 3M11 3H5M11 3v6" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
+            <a class="cta-mail" href="mailto:taimoormateen80@gmail.com" data-track="cta-email">taimoormateen80@gmail.com <svg width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden="true"><path d="M3 11L11 3M11 3H5M11 3v6" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
           </div>
 
           <div class="cta-form">
@@ -1552,7 +1552,7 @@
 
               <input class="hp" type="text" name="website" id="cf-website" tabindex="-1" autocomplete="off" aria-hidden="true" />
 
-              <button class="btn btn-primary" type="submit" id="cf-submit">
+              <button class="btn btn-primary" type="submit" id="cf-submit" data-track="form-submit">
                 <span class="btn-label">Send inquiry</span>
                 <svg class="arrow" width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden="true"><path d="M3 11L11 3M11 3H5M11 3v6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
               </button>
@@ -2585,6 +2585,8 @@
   })();
   </script>
 
+  <!-- LeadPilot AI — anonymous visitor analytics (Stage 3). No cookies, no IPs. -->
+  <script src="/analytics.js" defer></script>
   <!-- LeadPilot AI contact form (Stage 2) — public anon key only, RLS-protected -->
   <script src="/contact-form.js" defer></script>
 </body>

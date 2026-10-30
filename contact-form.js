@@ -24,6 +24,9 @@
     url: "https://ugnkndxkzaqgealymxwl.supabase.co",
     anonKey: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InVnbmtuZHhremFxZ2VhbHlteHdsIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODgwOTQ2OTIsImV4cCI6MjEwMzY3MDY5Mn0.i7hS2VM9MV8_uUAB-9zdkB5vzX54nb9UV1iR-ZLJ_UU",
     formToken: "57cce8fb94fccb5c57f0314742579fad29148bddbdb8865a",
+    /* Public site key printed by supabase/seed/portfolio_site.sql.
+       While it is still a placeholder the form uses the Stage 2 RPC. */
+    siteKey: "b9c00ebc51f850c0bb69fb1436368d9de75e70ee5d061def",
   };
 
   var form = document.getElementById("contactForm");
@@ -40,6 +43,7 @@
   var COOLDOWN_MS = 2 * 60 * 1000;
   var STORAGE_KEY = "trimax7:last-inquiry";
   var CONTACT_EMAIL = "taimoormateen80@gmail.com";
+  var CONSENT_TEXT = "I agree to be contacted about this inquiry.";
 
   var submitting = false;
 
@@ -182,7 +186,20 @@
   }
 
   function friendlyError(payload) {
-    var err = (payload && payload.error) || "";
+    var err = String((payload && (payload.error || payload.code)) || "").toLowerCase();
+    var map = {
+      site_not_found: "The form is temporarily unavailable. Please email " + CONTACT_EMAIL + " instead.",
+      form_disabled: "This form isn't accepting messages right now. Please email " + CONTACT_EMAIL + ".",
+      rate_limited: "Too many messages right now — please try again in a minute.",
+      name_required: "Please add your name.",
+      contact_required: "Please add an email address or phone number so I can reply.",
+      invalid_email: "That email address doesn't look right.",
+      message_too_short: "Please add a little more detail (at least 10 characters).",
+      invalid_message: "Please remove the extra links and try again.",
+      consent_required: "Please tick the consent box so I'm allowed to reply.",
+      workspace_not_configured: "The form isn't fully set up yet. Please email " + CONTACT_EMAIL + ".",
+    };
+    if (map[err]) return map[err];
     if (/not found/i.test(err)) {
       return "The form is temporarily unavailable. Please email " + CONTACT_EMAIL + " instead.";
     }
@@ -198,50 +215,140 @@
     return "Something went wrong sending your message. Please try again, or email " + CONTACT_EMAIL + ".";
   }
 
-  async function send(payload) {
+  /* Anonymous ids from analytics.js — may be absent when the visitor has
+     opted out or sent Do Not Track. The form still works without them. */
+  function analyticsIds() {
+    var a = window.trimax7Analytics;
+    if (!a) return { visitor: "", session: "", device: "", referrer: "" };
+    try {
+      return {
+        visitor: a.visitorId(),
+        session: a.sessionId(),
+        device: a.deviceCategory(),
+        referrer: a.referrerHost(),
+      };
+    } catch (e) {
+      return { visitor: "", session: "", device: "", referrer: "" };
+    }
+  }
+
+  function hasSiteKey() {
+    return !!CONFIG.siteKey && CONFIG.siteKey.indexOf("__") !== 0;
+  }
+
+  function missingFunction(result) {
+    if (!result) return false;
+    if (result.status === 404) return true;
+    var code = result.body && result.body.code;
+    if (code === "PGRST202" || code === "42883") return true;
+    return /could not find the function|function .* does not exist/i.test(result.text || "");
+  }
+
+  async function callRpc(fn, body) {
     var controller = new AbortController();
     var timer = setTimeout(function () {
       controller.abort();
     }, 15000);
 
     try {
-      var res = await fetch(CONFIG.url + "/rest/v1/rpc/create_lead_from_form", {
+      var res = await fetch(CONFIG.url + "/rest/v1/rpc/" + fn, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
           apikey: CONFIG.anonKey,
           Authorization: "Bearer " + CONFIG.anonKey,
         },
-        body: JSON.stringify({
-          p_token: CONFIG.formToken,
-          p_data: payload,
-          p_honeypot: honeypot ? honeypot.value : "",
-        }),
+        body: JSON.stringify(body),
         signal: controller.signal,
       });
 
-      var body = null;
+      var text = await res.text();
+      var json = null;
       try {
-        body = await res.json();
+        json = JSON.parse(text);
       } catch (e) {
-        body = null;
+        json = null;
       }
-
-      if (!res.ok) {
-        return { ok: false, message: friendlyError(body) };
-      }
-      return { ok: true, body: body || {} };
+      return { ok: res.ok, status: res.status, body: json, text: text };
     } catch (e) {
       return {
         ok: false,
-        message:
-          e && e.name === "AbortError"
-            ? "The request timed out. Please check your connection and try again."
-            : "Network error — please check your connection, or email " + CONTACT_EMAIL + ".",
+        status: 0,
+        body: null,
+        text: "",
+        aborted: !!(e && e.name === "AbortError"),
       };
     } finally {
       clearTimeout(timer);
     }
+  }
+
+  function networkMessage(result) {
+    return result && result.aborted
+      ? "The request timed out. Please check your connection and try again."
+      : "Network error — please check your connection, or email " + CONTACT_EMAIL + ".";
+  }
+
+  /* Stage 3 path: submit_site_inquiry stores the inquiry, the CRM lead, the
+     form_submit conversion event and the notification in one transaction.
+     Falls back to the Stage 2 RPC when the Stage 3 migration isn't applied. */
+  async function sendInquiry(fields) {
+    var ids = analyticsIds();
+    var honeypotValue = honeypot ? honeypot.value : "";
+
+    if (hasSiteKey()) {
+      var v2 = await callRpc("submit_site_inquiry", {
+        p_key: CONFIG.siteKey,
+        p_payload: {
+          name: fields.name,
+          email: fields.email,
+          phone: fields.phone,
+          company: fields.company,
+          message: fields.message,
+          source_url: window.location.href,
+          referrer_host: ids.referrer || referrerHost(),
+          consent: true,
+          consent_text: CONSENT_TEXT,
+          device_category: ids.device,
+        },
+        p_honeypot: honeypotValue,
+        p_elapsed_ms: Date.now() - STARTED_AT,
+        p_visitor_id: ids.visitor || null,
+        p_session_id: ids.session || null,
+      });
+
+      if (!missingFunction(v2)) {
+        if (v2.status === 0) return { ok: false, message: networkMessage(v2) };
+        if (!v2.ok) return { ok: false, message: friendlyError(v2.body) };
+        return { ok: true, body: v2.body || {}, mode: "v2" };
+      }
+    }
+
+    /* Legacy (Stage 2) path — provenance goes into the lead notes. */
+    var notes =
+      fields.message +
+      "\n\n—\nSource: " +
+      window.location.href +
+      "\nReferrer: " +
+      (ids.referrer || referrerHost() || "direct") +
+      "\nConsent: given " +
+      new Date().toISOString();
+
+    var legacy = await callRpc("create_lead_from_form", {
+      p_token: CONFIG.formToken,
+      p_data: {
+        name: fields.name,
+        email: fields.email,
+        phone: fields.phone,
+        company: fields.company,
+        message: notes,
+      },
+      p_honeypot: honeypotValue,
+    });
+
+    if (legacy.status === 0) return { ok: false, message: networkMessage(legacy) };
+    if (!legacy.ok) return { ok: false, message: friendlyError(legacy.body) };
+    return { ok: true, body: legacy.body || {}, mode: "legacy" };
   }
 
   form.addEventListener("input", function (event) {
@@ -283,25 +390,15 @@
       return;
     }
 
-    var refHost = referrerHost();
-    var notes =
-      message +
-      "\n\n—\nSource: " +
-      window.location.href +
-      "\nReferrer: " +
-      (refHost || "direct") +
-      "\nConsent: given " +
-      new Date().toISOString();
-
     setLoading(true);
     setStatus("info", "Sending…");
 
-    var result = await send({
+    var result = await sendInquiry({
       name: name,
       email: email,
       phone: phone,
       company: company,
-      message: notes,
+      message: message,
     });
 
     setLoading(false);
@@ -312,8 +409,15 @@
     }
 
     var body = result.body || {};
-    if (body.spam === true || body.duplicate === true) {
+    if (body.spam === true) {
       setStatus("success", "Thanks — your inquiry is in. I'll reply within 24 hours.");
+      form.reset();
+      return;
+    }
+
+    if (body.duplicate === true) {
+      setStatus("info", "This inquiry was already sent — I've got it. Give me up to 24 hours to reply.");
+      writeLast({ fp: fp, at: Date.now() });
       form.reset();
       return;
     }
