@@ -63,8 +63,8 @@ Sections: preloader → floating pill nav + spy → full-screen menu → hero (m
 
 ## Files Touched
 - `index.html` — entire portfolio (single file).
-- `Session Notes/2026-08-19 Portfolio Session.md` — this log.
-- `.obsidian/` — vault config for this folder.
+- `Trimax7 Vault/Sessions/2026-08-19 Portfolio Session.md` — this log.
+- `Trimax7 Vault/.obsidian/` — Obsidian vault config.
 
 ## Next Steps
 - Final visual QA pass in browser (320→1920px, reduced-motion, touch).

@@ -67,7 +67,7 @@ overflow, performance-first (rAF, IntersectionObserver, reduced-motion, mobile f
 
 ## Files Touched
 - `index.html` — entire portfolio (single file, ~2,300 lines after Phase 5).
-- `Session Notes/2026-08-20 Portfolio Session.md` — this log.
+- `Trimax7 Vault/Sessions/2026-08-20 Portfolio Session.md` — this log.
 - Screenshots taken for QA were deleted at the user's request.
 
 ## Next Steps

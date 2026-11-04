@@ -19,12 +19,14 @@ One self-contained `index.html` (~4,700 lines) with:
 
 ## Files
 
+Session Notes replaced by the project vault:
+
 ```
 index.html                  entire portfolio (styles, markup, motion)
 analytics.js                anonymous visitor tracking (LeadPilot AI, Stage 3)
 contact-form.js             contact form → LeadPilot AI CRM (Stage 2)
 assets/work/                real project screenshots (WebP served, JPG source)
-Session Notes/              build history
+Trimax7 Vault/              Obsidian project vault (Home + Sessions/)
 ```
 
 ## Deploy
@@ -42,4 +44,4 @@ Static site — deploy the repository root to any static host (Vercel, Netlify, 
 
 ## Session log
 
-See `Session Notes/` for the build history.
+See `Trimax7 Vault/` for the Obsidian dashboard and build history.

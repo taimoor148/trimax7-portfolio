@@ -146,7 +146,7 @@ screenshot review of every section on desktop and mobile.
   fallbacks, short-landscape rules, heading hierarchy.
 - `assets/work/*` — ten real project screenshots (WebP + JPG source).
 - `README.md` — rewritten for the current build.
-- `Session Notes/2026-11-04 Portfolio Session.md` — this log.
+- `Trimax7 Vault/Sessions/2026-11-04 Portfolio Session.md` — this log.
 
 ## Next steps
 
